@@ -223,21 +223,21 @@ def get_some_executor():
     if executor_type_name is not None:
         return make_executor(executor_type_name)
     else:
-        from warnings import warn
         executor_types_in_ascending_order = [
-            BasicExecutor,
-            SlurmExecutor,
-            LCLSFExecutor
+            ("basic", BasicExecutor),
+            ("slurm", SlurmExecutor),
+            ("lclsf", LCLSFExecutor)
         ]
-        guessed_executor_type = None
-        for executor_type in executor_types_in_ascending_order:
+        guessed_executor_name, guessed_executor_type = None, None
+        for name, executor_type in executor_types_in_ascending_order:
             executable = executor_type().get_command("")[0]
             if subprocess.call(f"which {executable}", stdout=subprocess.DEVNULL,
                         shell=True) == 0:
-                guessed_executor_type = executor_type
+                guessed_executor_name, guessed_executor_type = name, executor_type
         if guessed_executor_type is not None:
+            from warnings import warn
             warn("SQUIRM_EXECUTOR_TYPE has not been set; guessed executor type '"
-                        + f"{guessed_executor_type.__name__}'.")
+                        + f"{guessed_executor_name}'.")
         else:
             raise RuntimeError("Unable to detect a valid MPI executor.")
         return guessed_executor_type()
