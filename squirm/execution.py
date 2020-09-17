@@ -61,32 +61,14 @@ class Executor(metaclass=abc.ABCMeta):
 
     def run(self, code_string, exec_params=None):
         """Runs Python code stored in *code_string* with MPI."""
-        return self.__call__([sys.executable, "-m", "mpi4py", "-c", "\'"
+        self.__call__([sys.executable, "-m", "mpi4py", "-c", "\'"
                     + code_string + "\'"], exec_params)
-
-    def check_run(self, code_string, exec_params=None):
-        """
-        Runs Python code stored in *code_string* with MPI and raises an instance of
-        :class:`ProcessError` if the execution fails.
-        """
-        exit_code = self.run(code_string, exec_params)
-        if exit_code != 0:
-            raise ProcessError(exit_code)
 
     def call(self, func, exec_params=None):
         """Calls *func* with MPI. Note: *func* must be picklable."""
         calling_code = ('import sys; import pickle; pickle.loads(bytes.fromhex("'
                     + pickle.dumps(func).hex() + '"))()')
-        return self.run(calling_code, exec_params)
-
-    def check_call(self, func, exec_params=None):
-        """
-        Calls *func* with MPI and raises an instance of :class:`ProcessError` if
-        the execution fails. Note: *func* must be picklable.
-        """
-        exit_code = self.call(func, exec_params)
-        if exit_code != 0:
-            raise ProcessError(exit_code)
+        self.run(calling_code, exec_params)
 
 
 class ExecParams:
@@ -144,7 +126,9 @@ class BasicExecutor(Executor):
 
     def __call__(self, command, exec_params=None):
         exec_command = self.get_command(command, exec_params)
-        return subprocess.call(" ".join(exec_command), shell=True)
+        exit_code = subprocess.call(" ".join(exec_command), shell=True)
+        if exit_code != 0:
+            raise ProcessError(exit_code)
 
 
 class SlurmExecutor(Executor):
@@ -168,7 +152,9 @@ class SlurmExecutor(Executor):
 
     def __call__(self, command, exec_params=None):
         exec_command = self.get_command(command, exec_params)
-        return subprocess.call(" ".join(exec_command), shell=True)
+        exit_code = subprocess.call(" ".join(exec_command), shell=True)
+        if exit_code != 0:
+            raise ProcessError(exit_code)
 
 
 class LCLSFExecutor(Executor):
@@ -194,7 +180,9 @@ class LCLSFExecutor(Executor):
 
     def __call__(self, command, exec_params=None):
         exec_command = self.get_command(command, exec_params)
-        return subprocess.call(" ".join(exec_command), shell=True)
+        exit_code = subprocess.call(" ".join(exec_command), shell=True)
+        if exit_code != 0:
+            raise ProcessError(exit_code)
 
 
 def make_executor(executor_type_name):
