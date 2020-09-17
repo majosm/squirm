@@ -185,7 +185,7 @@ class LCLSFExecutor(Executor):
             raise ProcessError(exit_code)
 
 
-def make_executor(executor_type_name):
+def make_executor(executor_type_name=None):
     """
     Returns an instance of a class derived from :class:`Executor` given an executor
     type name as input.
@@ -193,9 +193,28 @@ def make_executor(executor_type_name):
     :arg executor_type_name: The executor type name. Can be one of `'basic'`,
         `'slurm'`, or `'lclsf'`.
     """
-    type_name_map = {
-        "basic": BasicExecutor,
-        "slurm": SlurmExecutor,
-        "lclsf": LCLSFExecutor
-    }
-    return type_name_map[executor_type_name]()
+    if executor_type_name is not None:
+        type_name_map = {
+            "basic": BasicExecutor,
+            "slurm": SlurmExecutor,
+            "lclsf": LCLSFExecutor
+        }
+        return type_name_map[executor_type_name]()
+    else:
+        return _guess_executor()()
+
+
+def _guess_executor():
+    executor_types_in_ascending_order = [
+        BasicExecutor,
+        SlurmExecutor,
+        LCLSFExecutor
+    ]
+    guessed_executor_type = None
+    for executor_type in executor_types_in_ascending_order:
+        executable = executor_type().get_command("")[0]
+        if subprocess.call(f"which {executable}", shell=True) == 0:
+            guessed_executor_type = executor_type
+    if guessed_executor_type is None:
+        raise RuntimeError("Unable to detect a valid MPI executor.")
+    return guessed_executor_type
