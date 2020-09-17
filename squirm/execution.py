@@ -45,7 +45,14 @@ import sys
 
 
 class Executor(metaclass=abc.ABCMeta):
-    """Base class for a general MPI executor."""
+    """
+    Base class for a general MPI executor.
+
+    .. automethod:: get_command
+    .. automethod:: __call__
+    .. automethod:: run
+    .. automethod:: call
+    """
     @abc.abstractmethod
     def get_command(self, command, exec_params=None):
         """
@@ -72,7 +79,11 @@ class Executor(metaclass=abc.ABCMeta):
 
 
 class ExecParams:
-    """Collection of parameters to pass to the executor."""
+    """
+    Collection of parameters to pass to the executor.
+
+    .. automethod:: __init__
+    """
     def __init__(self, num_tasks=None, num_nodes=None, tasks_per_node=None,
                 gpus_per_task=None):
         """
