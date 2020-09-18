@@ -67,8 +67,7 @@ def test_unsupported_param():
     pytest.importorskip("mpi4py")
     mpi_exec = get_some_executor()
     try:
-        mpi_exec.call(partial(_test_mpi_func, "hello"), exec_params=ExecParams(
-                    num_tasks=2, gpus_per_task=1))
+        mpi_exec(["true"], exec_params=ExecParams(num_tasks=2, gpus_per_task=1))
         pytest.skip("Oops. Unsupported param is actually supported.")
     except ExecParamError as e:
         assert e.param_name == "gpus_per_task"
