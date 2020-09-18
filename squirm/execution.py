@@ -41,7 +41,6 @@ THE SOFTWARE.
 
 import abc
 import os
-import pickle
 import subprocess
 import sys
 
@@ -75,8 +74,13 @@ class Executor(metaclass=abc.ABCMeta):
 
     def call(self, func, exec_params=None):
         """Calls *func* with MPI. Note: *func* must be picklable."""
-        calling_code = ('import sys; import pickle; pickle.loads(bytes.fromhex("'
-                    + pickle.dumps(func).hex() + '"))()')
+        def embed(obj):
+            import base64
+            import pickle
+            obj_string = base64.b64encode(pickle.dumps(obj)).decode("ascii")
+            return ('pickle.loads(base64.b64decode("' + obj_string
+                        + '".encode("ascii")))')
+        calling_code = "import pickle; import base64; " + embed(func) + "()"
         self.run(calling_code, exec_params)
 
 
