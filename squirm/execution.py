@@ -59,21 +59,41 @@ class Executor(metaclass=abc.ABCMeta):
         """
         Returns a list of strings representing the full command that will be executed
         to launch *command*.
+
+        :arg command: The command to execute with MPI.
+        :arg exec_params: An instance of :class:`ExecParams`.
         """
         pass
 
     @abc.abstractmethod
     def __call__(self, command, exec_params=None):
-        """Executes *command* with MPI."""
+        """
+        Executes *command* with MPI.
+
+        :arg command: The command to execute with MPI.
+        :arg exec_params: An instance of :class:`ExecParams`.
+        """
         pass
 
     def run(self, code_string, exec_params=None):
-        """Runs Python code stored in *code_string* with MPI."""
+        """
+        Runs Python code with MPI.
+
+        :arg code_string: A string containing the Python code to execute with MPI.
+        :arg exec_params: An instance of :class:`ExecParams`.
+        """
         self.__call__([sys.executable, "-m", "mpi4py", "-c", "\'"
                     + code_string + "\'"], exec_params)
 
     def call(self, func, *args, exec_params=None, **kwargs):
-        """Calls *func* with MPI. Note: *func* must be picklable."""
+        """
+        Calls a function with MPI.
+
+        :arg func: The function to execute with MPI. Must be picklable.
+        :arg *args: Positional arguments to pass to *func*. Must be picklable.
+        :arg **kwargs: Keyword arguments to pass to *func*. Must be picklable.
+        :arg exec_params: An instance of :class:`ExecParams`.
+        """
         def embed(obj):
             import base64
             import pickle
