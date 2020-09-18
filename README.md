@@ -1,4 +1,4 @@
-# squirm
+# squirm (Scheduler/Queue-Independent Resource Management)
 
 Python abstraction layer for cluster job schedulers. Part of the
 suite of tools produced by the Center for Exascale-Enabled
