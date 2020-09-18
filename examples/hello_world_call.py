@@ -1,5 +1,4 @@
 from squirm.execution import get_some_executor, ExecParams
-from functools import partial
 
 
 def print_greeting(greeting):
