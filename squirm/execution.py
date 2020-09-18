@@ -58,7 +58,7 @@ class Executor(metaclass=abc.ABCMeta):
     def get_command(self, command, exec_params=None):
         """
         Returns a list of strings representing the full command that will be executed
-        to launch *command*.
+        to launch a command with MPI.
 
         :arg command: The command to execute with MPI.
         :arg exec_params: An instance of :class:`ExecParams`.
@@ -68,7 +68,7 @@ class Executor(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __call__(self, command, exec_params=None):
         """
-        Executes *command* with MPI.
+        Executes a command with MPI.
 
         :arg command: The command to execute with MPI.
         :arg exec_params: An instance of :class:`ExecParams`.
@@ -90,8 +90,8 @@ class Executor(metaclass=abc.ABCMeta):
         Calls a function with MPI.
 
         :arg func: The function to execute with MPI. Must be picklable.
-        :arg *args: Positional arguments to pass to *func*. Must be picklable.
-        :arg **kwargs: Keyword arguments to pass to *func*. Must be picklable.
+        :arg \\*args: Positional arguments to pass to *func*. Must be picklable.
+        :arg \\*\\*kwargs: Keyword arguments to pass to *func*. Must be picklable.
         :arg exec_params: An instance of :class:`ExecParams`.
         """
         def embed(obj):
@@ -125,9 +125,10 @@ class ExecParams:
         :arg tasks_per_node: The number of MPI tasks to launch per node.
         :arg gpus_per_task: The number of GPUs to assign per task.
 
-        Note: A given executor may not support all of these arguments. If it is
-        passed an unsupported argument, it will raise an instance of
-        :class:`ExecParamError`.
+        .. note::
+            A given executor may not support all of these arguments. If it is
+            passed an unsupported argument, it will raise an instance of
+            :class:`ExecParamError`.
         """
         self._create_param_dict(num_tasks=num_tasks, num_nodes=num_nodes,
                     tasks_per_node=tasks_per_node, gpus_per_task=gpus_per_task)
@@ -140,12 +141,14 @@ class ExecParams:
 
 
 class ProcessError(RuntimeError):
+    """Error raised when a command executed with MPI fails."""
     def __init__(self, exit_code):
         self.exit_code = exit_code
         super().__init__(f"Execution failed with exit code {exit_code}.")
 
 
 class ExecParamError(RuntimeError):
+    """Error raised when an executor is passed an unsupported parameter."""
     def __init__(self, param_name):
         self.param_name = param_name
         super().__init__(f"Executor does not support parameter '{self.param_name}'.")
