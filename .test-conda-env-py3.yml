@@ -1,0 +1,9 @@
+name: test-conda-env-py3
+channels:
+- conda-forge
+- nodefaults
+dependencies:
+- git
+- python=3
+- pip
+- pytest
