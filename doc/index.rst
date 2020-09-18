@@ -3,9 +3,7 @@ Welcome to squirm's documentation!
 
 **S**\ cheduler/**Qu**\ eue-**I**\ ndependent **R**\ esource **M**\ anagement
 
-Python abstraction layer for cluster job schedulers. Part of the
-suite of tools produced by the Center for Exascale-Enabled
-Scramjet Design at the University of Illinois.
+.. automodule:: squirm
 
 Table of Contents
 -----------------
