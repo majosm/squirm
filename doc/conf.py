@@ -66,9 +66,9 @@ html_theme = "alabaster"
 html_theme_options = {
     "extra_nav_links": {
         "🚀 Github": "https://github.com/majosm/squirm",
-#         "💾 Download Releases": "https://pypi.org/project/squirm",
         }
     }
+#         "💾 Download Releases": "https://pypi.org/project/squirm",
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
