@@ -40,17 +40,17 @@ def test_run_fail(num_tasks):
                     + "assert False", exec_params=ExecParams(num_tasks=num_tasks))
 
 
-def _test_mpi_func(arg):
+def _test_func(arg1, arg2):
     from mpi4py import MPI
     MPI.COMM_WORLD.Barrier()
-    assert arg == "hello"
+    assert arg1 + arg2 == "hello"
 
 
 @pytest.mark.parametrize("num_tasks", [1, 2])
 def test_call_success(num_tasks):
     pytest.importorskip("mpi4py")
     mpi_exec = get_some_executor()
-    mpi_exec.call(partial(_test_mpi_func, "hello"), exec_params=ExecParams(
+    mpi_exec.call(partial(_test_func, "he", "llo"), exec_params=ExecParams(
                 num_tasks=num_tasks))
 
 
@@ -59,8 +59,32 @@ def test_call_fail(num_tasks):
     pytest.importorskip("mpi4py")
     mpi_exec = get_some_executor()
     with pytest.raises(ProcessError):
-        mpi_exec.call(partial(_test_mpi_func, "goodbye"), exec_params=ExecParams(
+        mpi_exec.call(partial(_test_func, "good", "bye"), exec_params=ExecParams(
                     num_tasks=num_tasks))
+
+
+@pytest.mark.parametrize("num_tasks", [1, 2])
+def test_call_with_args(num_tasks):
+    pytest.importorskip("mpi4py")
+    mpi_exec = get_some_executor()
+    mpi_exec.call(_test_func, "he", "llo", exec_params=ExecParams(
+                num_tasks=num_tasks))
+
+
+@pytest.mark.parametrize("num_tasks", [1, 2])
+def test_call_with_kwargs(num_tasks):
+    pytest.importorskip("mpi4py")
+    mpi_exec = get_some_executor()
+    mpi_exec.call(_test_func, arg1="he", arg2="llo", exec_params=ExecParams(
+                num_tasks=num_tasks))
+
+
+@pytest.mark.parametrize("num_tasks", [1, 2])
+def test_call_with_args_and_kwargs(num_tasks):
+    pytest.importorskip("mpi4py")
+    mpi_exec = get_some_executor()
+    mpi_exec.call(_test_func, "he", arg2="llo",
+                exec_params=ExecParams(num_tasks=num_tasks))
 
 
 def test_unsupported_param():

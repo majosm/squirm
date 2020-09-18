@@ -72,7 +72,7 @@ class Executor(metaclass=abc.ABCMeta):
         self.__call__([sys.executable, "-m", "mpi4py", "-c", "\'"
                     + code_string + "\'"], exec_params)
 
-    def call(self, func, exec_params=None):
+    def call(self, func, *args, exec_params=None, **kwargs):
         """Calls *func* with MPI. Note: *func* must be picklable."""
         def embed(obj):
             import base64
@@ -80,7 +80,12 @@ class Executor(metaclass=abc.ABCMeta):
             obj_string = base64.b64encode(pickle.dumps(obj)).decode("ascii")
             return ('pickle.loads(base64.b64decode("' + obj_string
                         + '".encode("ascii")))')
-        calling_code = "import pickle; import base64; " + embed(func) + "()"
+        calling_code = "import pickle; import base64; " + embed(func) + "("
+        if len(args) > 0:
+            calling_code += "*" + embed(args) + ", "
+        if len(kwargs) > 0:
+            calling_code += "**" + embed(kwargs)
+        calling_code += ")"
         self.run(calling_code, exec_params)
 
 
