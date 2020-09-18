@@ -2,6 +2,7 @@
 
 **S**cheduler/**Qu**eue-**I**ndependent **R**esource **M**anagement
 
+[![CI test](https://github.com/majosm/squirm/workflows/CI%20test/badge.svg)](https://github.com/majosm/squirm/actions?query=workflow%3A%22CI+test%22+branch%3Amaster)
 [![Documentation Status](https://readthedocs.org/projects/squirm/badge/?version=latest)](https://squirm.readthedocs.io/en/latest/?badge=latest)
 
 Python abstraction layer for cluster job schedulers.
