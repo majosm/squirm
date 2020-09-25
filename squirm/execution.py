@@ -92,8 +92,8 @@ class Executor(metaclass=abc.ABCMeta):
         Call a function with MPI.
 
         :arg func: The function to execute with MPI. Must be picklable.
-        :arg \\*args: Positional arguments to pass to *func*. Must be picklable.
-        :arg \\*\\*kwargs: Keyword arguments to pass to *func*. Must be picklable.
+        :arg \*args: Positional arguments to pass to *func*. Must be picklable.
+        :arg \*\*kwargs: Keyword arguments to pass to *func*. Must be picklable.
         :arg exec_params: An instance of :class:`ExecParams`.
         """
         def embed(obj):
