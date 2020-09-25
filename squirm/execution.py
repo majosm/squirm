@@ -1,5 +1,5 @@
 """
-:mod:`squirm.execution` wraps non-submitting executors (mpiexec, srun, etc.).
+Wrappers for non-submitting executors (mpiexec, srun, etc.).
 
 .. autoclass:: Executor
 .. autoclass:: ExecParams
