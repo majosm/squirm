@@ -14,6 +14,7 @@ Table of Contents
     installation
     job_submission
     command_execution
+    misc
 
 Indices and tables
 ==================
