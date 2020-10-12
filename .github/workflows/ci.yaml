@@ -117,13 +117,12 @@ jobs:
           shell: bash -l {0}
           run: |
             . .ci-support/install.sh
+            conda install sphinx graphviz
 
         - name: Build docs
           shell: bash -l {0}
           run: |
             MINIFORGE_INSTALL_DIR=.miniforge3
             . "$MINIFORGE_INSTALL_DIR/bin/activate" testing
-
-            conda install sphinx graphviz
             cd doc
             make html SPHINXOPTS="-W --keep-going -n"
