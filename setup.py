@@ -13,7 +13,7 @@ def main():
 
     setup(name="squirm",
           version=version_dict["VERSION_TEXT"],
-          description=("TBD"),
+          description=("Python abstraction layer for cluster job schedulers"),
           long_description=open("README.md", "rt").read(),
           author="CEESD",
           author_email="mjsmith6@illinois.edu",
@@ -32,9 +32,6 @@ def main():
               "Programming Language :: Python :: 3.8",
               "Programming Language :: Python :: 3.9",
               "Topic :: Scientific/Engineering",
-              "Topic :: Scientific/Engineering :: Information Analysis",
-              "Topic :: Scientific/Engineering :: Mathematics",
-              "Topic :: Scientific/Engineering :: Visualization",
               "Topic :: Software Development :: Libraries",
               "Topic :: Utilities",
               ],
